@@ -40,7 +40,7 @@ class HealthMonitor:
         with open(STATE_FILE, "w") as f:
             json.dump(self.state, f, indent=2)
 
-    def load_servers(self) -> List[str]:
+    def load_servers(self) -> List[Dict]:
         """Load server list from config file"""
         if not Path(SERVERS_FILE).exists():
             # Create example file
@@ -57,8 +57,9 @@ class HealthMonitor:
         with open(SERVERS_FILE, "r") as f:
             return [line.strip() for line in f if line.strip()]
 
-    def check_server(self, url: str) -> bool:
+    def check_server(self, url: Dict) -> bool:
         """Check if server responds (with timeout)"""
+
         try:
             response = requests.get(url, timeout=5)
             return response.status_code == 200
